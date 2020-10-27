@@ -11,7 +11,9 @@ public class compressionTest {
 		System.out.println("Character Codes:\n-----------------------");
 		System.out.println(huff.traverseHuffmanTree(huff.buildTree(textFile)));
 		System.out.println("Encoded File:\n-----------------------");
-		System.out.println(huff.encodeFile(textFile, huff.buildTree(textFile)) + "\n");
+		String encoded = huff.encodeFile(textFile, huff.buildTree(textFile));
+		System.out.println(encoded + "\n");
+		System.out.println("length:" + encoded.length() + "\n");
 		System.out.println("Decoded File:\n-----------------------");
 		System.out.println(huff.decodeFile(huff.encodeFile(textFile, huff.buildTree(textFile)),huff.buildTree(textFile)) + "\n");
 		

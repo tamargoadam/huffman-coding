@@ -11,8 +11,8 @@ public class HuffmanEncoder implements HuffmanCoding {
 	
 	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(128);
 	
-	//Search through huffman tree
-	private Hashtable<Character, String> huffEncodeTable(HuffTree huff){
+	//Search through Huffman tree
+	private Hashtable<Character, String> huffEncodeTable(HuffmanTree huff){
 		for(int i=0; i<127; i++){
 				if(characterCode(huff.root(), (char)i, "") != ""){
 					encodeTable.put((char)i, characterCode(huff.root(), (char)i, ""));
@@ -93,27 +93,28 @@ public class HuffmanEncoder implements HuffmanCoding {
 	
 	
 	//Take a file as input and create a Huffman Tree
-	public HuffTree buildTree(File inputFile){
+	public HuffmanTree buildTree(File inputFile){
 		
 		Hashtable<Character, Integer> charHash = fileToHash(inputFile);
 	    
 		//Create max heap
-		HuffHeap HHeap = new HuffHeap(128);
+//		BinaryHeap HHeap = new BinaryHeap(128);
+		FourWayHeap HHeap = new FourWayHeap(128);
 		for(int i=0; i<127; i++){
 		    if(charHash.get((char)i) != null){
-		    	HHeap.insert(new HuffTree((char)i, charHash.get((char)i)));
+		    	HHeap.insert(new HuffmanTree((char)i, charHash.get((char)i)));
 		    }
 		}
 	    
-		//Create huff tree from heap
-		HuffTree tmp1 = null;
-		HuffTree tmp2 = null; 
-		HuffTree tmp3 = null;
+		//Create Huffman tree from heap
+		HuffmanTree tmp1 = null;
+		HuffmanTree tmp2 = null; 
+		HuffmanTree tmp3 = null;
 
 		while (HHeap.heapsize() > 1) { // While two items left
 			tmp1 = HHeap.removeMin();
 	    	tmp2 = HHeap.removeMin();
-	    	tmp3 = new HuffTree(tmp1.root(), tmp2.root(), tmp1.weight() + tmp2.weight());
+	    	tmp3 = new HuffmanTree(tmp1.root(), tmp2.root(), tmp1.weight() + tmp2.weight());
 			HHeap.insert(tmp3);   // Return new tree to heap
 		}
 		return tmp3; 
@@ -122,7 +123,7 @@ public class HuffmanEncoder implements HuffmanCoding {
 		
 	//Take a file and a HuffTree and encode the file.
 	//Output a string of 1's and 0's representing the file
-	public String encodeFile(File inputFile, HuffTree huffTree){
+	public String encodeFile(File inputFile, HuffmanTree huffTree){
         
 		//Create table of chars and corresponding code
 		Hashtable<Character, String> encodeTable = huffEncodeTable(huffTree);
@@ -130,7 +131,6 @@ public class HuffmanEncoder implements HuffmanCoding {
 		StringBuilder encode = new StringBuilder();
 		StringBuilder fileString = new StringBuilder();
 		String line = "";
-		char readChar;
 		
 		BufferedReader br;
 		try {
@@ -152,7 +152,7 @@ public class HuffmanEncoder implements HuffmanCoding {
 	}	
 		
 	//take a String and HuffTree and output the decoded words
-	public String decodeFile(String code, HuffTree huffTree){
+	public String decodeFile(String code, HuffmanTree huffTree){
 		String decoded = "";
 		boolean found = false;
 		HuffInternalNode node = (HuffInternalNode) huffTree.root();
@@ -181,7 +181,7 @@ public class HuffmanEncoder implements HuffmanCoding {
 	}	
 		
 	//print the characters and their codes
-	public String traverseHuffmanTree(HuffTree huffTree){
+	public String traverseHuffmanTree(HuffmanTree huffTree){
 		
 		String tablePrint = "";
 		//Create table of chars and corresponding code
@@ -194,175 +194,6 @@ public class HuffmanEncoder implements HuffmanCoding {
 		}
 		return tablePrint;
 	}
-
 	
-}
-
-
-//Classes for building huffman tree
-
-//General node
-interface HuffBaseNode {
-	boolean isLeaf(); 
-	int weight();
-}
-
-
-//Huffman tree leaf node
-class HuffLeafNode implements HuffBaseNode {
-	
-	private char element;      // Element for this node
-	private int weight;        // Weight for this node
-
-	//Constructor
-	HuffLeafNode(char el, int wt){
-		element = el; weight = wt;
-	}
-
-	char value(){
-		return element;
-	}
-
-	public int weight() {
-		return weight;
-	}
-
-	public boolean isLeaf() {
-		return true;
-	}
-}
-
-
-//Huffman tree internal node
-class HuffInternalNode implements HuffBaseNode {
-	private int weight;            
-	private HuffBaseNode left;  	
-	private HuffBaseNode right; 
-
-	//Constructor
-	HuffInternalNode(HuffBaseNode l, HuffBaseNode r, int wt){
-		left = l; right = r; weight = wt; 
-	}
-
-	HuffBaseNode left(){
-		return left;
-	}
-
-	HuffBaseNode right(){
-		return right; 
-	}
-
-	public int weight(){
-		return weight; 
-	}
-
-	public boolean isLeaf(){
-		return false; 
-	}
-	
-}
-
-
-//Tree Structure
-class HuffTree{
-	
-	private HuffBaseNode root;  
-	
-	//Constructors
-	HuffTree(char el, int wt){
-		root = new HuffLeafNode(el, wt);
-	}
-	HuffTree(HuffBaseNode l, HuffBaseNode r, int wt){
-		root = new HuffInternalNode(l, r, wt);
-	}
-
-	HuffBaseNode root(){
-		return root;
-	}
-	
-	int weight(){
-		return root.weight();
-	}
-	
-	int compareTo(Object t){
-		HuffTree that = (HuffTree)t;
-		if (root.weight() < that.weight()) return -1;
-	    else if (root.weight() == that.weight()) return 0;
-	    else return 1;
-	}
-}
-
-//Max heap
-class HuffHeap{
-	
-	HuffTree[] arrayHeap;
-	int heapSize = 0;
-	
-	//Constructor
-	HuffHeap(int maxSize){
-		arrayHeap = new HuffTree[maxSize + 1];
-	}
-	
-	public int heapsize() {
-		return heapSize;
-	}
-
-	void insert(HuffTree node){
-		arrayHeap[heapSize + 1] = node;
-		
-		int index = heapSize + 1;
-		HuffTree tempNode;
-		
-		//Adjust heap
-		while(index/2 != 0 && arrayHeap[index/2].weight() > node.weight()){
-			tempNode = arrayHeap[index/2];
-			arrayHeap[index/2] = arrayHeap[index];
-			arrayHeap[index] = tempNode;
-			index = index/2;
-		}
-		heapSize++;
-	}
-	
-	HuffTree removeMin(){
-		if(heapSize == 0){
-			System.err.println("Cannot remove from empty heap");
-			return null;
-		}
-		
-		HuffTree minNode = arrayHeap[1];
-		arrayHeap[1] = arrayHeap[heapSize];
-		heapSize--;
-		int index = 1;
-		HuffTree tempNode;
-		
-		//Adjust heap
-		if(heapSize > 1){
-			while(index*2+1 <= heapSize && 
-					(arrayHeap[index].weight() > arrayHeap[index*2].weight() 
-					|| arrayHeap[index].weight() > arrayHeap[index*2+1].weight())){
-				
-				if(arrayHeap[index*2].weight() < arrayHeap[index*2+1].weight()){
-					tempNode = arrayHeap[index*2];
-					arrayHeap[index*2] = arrayHeap[index];
-					arrayHeap[index] = tempNode;
-					index = index*2;
-				}else{
-					tempNode = arrayHeap[index*2+1];
-					arrayHeap[index*2+1] = arrayHeap[index];
-					arrayHeap[index] = tempNode;
-					index = index*2+1;
-				}
-				
-			}
-			if(index*2 <= heapSize && arrayHeap[index*2].weight() < arrayHeap[index].weight()){
-				tempNode = arrayHeap[index*2];
-				arrayHeap[index*2] = arrayHeap[index];
-				arrayHeap[index] = tempNode;
-				index = index*2;
-			}
-		}
-		
-		return minNode;
-	}
 }
 
