@@ -30,3 +30,8 @@ hs_err_pid*
 
 # databases
 *.db
+
+# output files
+encoded.bin
+code_table.txt
+decoded.txt
