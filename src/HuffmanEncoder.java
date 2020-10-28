@@ -1,13 +1,14 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 
 public class HuffmanEncoder implements HuffmanCoding {
 	
 	private String heapType = "binary"; // binary, 4way, or pairing
-	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(128);
+	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(129);
 	
 	// constructor
 	// defaults heap type to binary
@@ -196,10 +197,17 @@ public class HuffmanEncoder implements HuffmanCoding {
 		// create table of chars and corresponding code
 		Hashtable<Character, String> codeTable = huffEncodeTable(huffTree);
 		
-		// create string from table
-		for(int i=0; i<127; i++){
-			if(codeTable.get((char)i) != null)
-				tablePrint = tablePrint + ((char)i) + " " + codeTable.get((char)i) + "\n";
+		try {
+			FileWriter w = new FileWriter("./code_table.txt");
+			// create string from table
+			for(int i=0; i<127; i++){
+				if(codeTable.get((char)i) != null)
+					w.append(((char)i) + " " + codeTable.get((char)i) + "\n");
+					tablePrint = tablePrint + ((char)i) + " " + codeTable.get((char)i) + "\n";
+			}
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return tablePrint;
 	}
