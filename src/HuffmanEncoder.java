@@ -5,10 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 
-public class HuffmanEncoder implements HuffmanCoding {
+public class HuffmanEncoder {
 	
 	private String heapType = "binary"; // binary, 4way, or pairing
-	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(129);
+	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(128);
 	
 	// constructor
 	// defaults heap type to binary
@@ -138,7 +138,6 @@ public class HuffmanEncoder implements HuffmanCoding {
 		// create table of chars and corresponding code
 		Hashtable<Character, String> encodeTable = huffEncodeTable(huffTree);
 		
-		BitOutputStream s = new BitOutputStream("./encoded.bin");
 		StringBuilder encode = new StringBuilder();
 		int c;
 		String code;
@@ -150,6 +149,33 @@ public class HuffmanEncoder implements HuffmanCoding {
 			{
 				code = encodeTable.get((char)c);
 				encode.append(code);
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return encode.toString();
+	}	
+	
+	// take a file and a HuffTree and encode the file.
+	// output a string of 1's and 0's representing the file
+	public void generateEncodedFile(File inputFile, HuffmanTree huffTree){
+	        
+		// create table of chars and corresponding code
+		Hashtable<Character, String> encodeTable = huffEncodeTable(huffTree);
+			
+		int c;
+		String code;
+			
+		BufferedReader br;
+		BitOutputStream s;
+		try {
+			br = new BufferedReader(new FileReader(inputFile));
+			s = new BitOutputStream("./encoded.bin");
+			while((c=br.read())!=-1)
+			{
+				code = encodeTable.get((char)c);
 				s.writeBits(code.length(), Integer.parseInt(code, 2)); // TODO: add end of file indication
 			}
 			br.close();
@@ -157,12 +183,12 @@ public class HuffmanEncoder implements HuffmanCoding {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-        return encode.toString();
-	}	
 		
+	}	
+	
 	// take a string and huffman tree and output the decoded words
 	public String decodeFile(String code, HuffmanTree huffTree){
+		
 		String decoded = "";
 		boolean found = false;
 		HuffInternalNode node = (HuffInternalNode) huffTree.root();
@@ -196,20 +222,32 @@ public class HuffmanEncoder implements HuffmanCoding {
 		String tablePrint = "";
 		// create table of chars and corresponding code
 		Hashtable<Character, String> codeTable = huffEncodeTable(huffTree);
+
+		// create string from table
+		for(int i=0; i<127; i++){
+			if(codeTable.get((char)i) != null)
+				tablePrint = tablePrint + ((char)i) + " " + codeTable.get((char)i) + "\n";
+		}
+
+		return tablePrint;
+	}
+	
+	// generates a file with characters and their codes
+	public void generateCodeTable(HuffmanTree huffTree){
 		
+		// create table of chars and corresponding code
+		Hashtable<Character, String> codeTable = huffEncodeTable(huffTree);
+			
 		try {
 			FileWriter w = new FileWriter("./code_table.txt");
-			// create string from table
 			for(int i=0; i<127; i++){
 				if(codeTable.get((char)i) != null)
 					w.append(((char)i) + " " + codeTable.get((char)i) + "\n");
-					tablePrint = tablePrint + ((char)i) + " " + codeTable.get((char)i) + "\n";
 			}
 			w.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return tablePrint;
 	}
 	
 }
