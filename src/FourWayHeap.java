@@ -1,15 +1,16 @@
+
 //4-way cache optimized min heap for creating Huffman tree
 class FourWayHeap implements MinHeap{
 	
 	private HuffmanTree[] fourWayHeap;
 	private int heapSize = 0;
 	
-	//Constructor
+	// constructor
 	FourWayHeap(int maxSize){
 		fourWayHeap = new HuffmanTree[maxSize + 1];
 	}
 	
-	public int heapsize() {
+	public int heapSize() {
 		return heapSize;
 	}
 	
@@ -35,7 +36,6 @@ class FourWayHeap implements MinHeap{
 	// returns true any child of the parent at index 'index' has a lesser weight
 	private boolean isChildLess(int index){
 		int numChild = Math.min(heapSize+3-getChild(index, 0)+1, 4);
-//		System.out.println(numChild);
 		for(int i=0; i<numChild; i++){
 			if (fourWayHeap[index].weight() > fourWayHeap[getChild(index, i)].weight())
 				return true;
@@ -66,7 +66,7 @@ class FourWayHeap implements MinHeap{
 		int index = heapSize + 3;
 		fourWayHeap[index] = node;
 		
-		//Adjust heap
+		// adjust heap
 		while(fourWayHeap[getParent(index)] != null && fourWayHeap[getParent(index)].weight() > node.weight()){
 			swap(index, getParent(index));
 			index = getParent(index);
@@ -86,7 +86,7 @@ class FourWayHeap implements MinHeap{
 		heapSize--;
 		int leastChild;
 		
-		//Adjust heap
+		// adjust heap
 		if(heapSize > 1){
 			while(getChild(index, 0) <= heapSize+3 && isChildLess(index)){
 

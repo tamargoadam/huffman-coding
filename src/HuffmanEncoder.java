@@ -99,7 +99,8 @@ public class HuffmanEncoder implements HuffmanCoding {
 	    
 		//Create max heap
 //		BinaryHeap HHeap = new BinaryHeap(128);
-		FourWayHeap HHeap = new FourWayHeap(128);
+		PairingHeap HHeap = new PairingHeap();
+//		FourWayHeap HHeap = new FourWayHeap(128);
 		for(int i=0; i<127; i++){
 		    if(charHash.get((char)i) != null){
 		    	HHeap.insert(new HuffmanTree((char)i, charHash.get((char)i)));
@@ -111,7 +112,7 @@ public class HuffmanEncoder implements HuffmanCoding {
 		HuffmanTree tmp2 = null; 
 		HuffmanTree tmp3 = null;
 
-		while (HHeap.heapsize() > 1) { // While two items left
+		while (HHeap.heapSize() > 1) { // While two items left
 			tmp1 = HHeap.removeMin();
 	    	tmp2 = HHeap.removeMin();
 	    	tmp3 = new HuffmanTree(tmp1.root(), tmp2.root(), tmp1.weight() + tmp2.weight());

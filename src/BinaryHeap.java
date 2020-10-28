@@ -1,16 +1,16 @@
 
-//Binary min heap for creating Huffman tree
+// binary min heap for creating Huffman tree
 class BinaryHeap implements MinHeap{
 	
 	private HuffmanTree[] binHeap;
 	private int heapSize = 0;
 	
-	//Constructor
+	// constructor
 	BinaryHeap(int maxSize){
 		binHeap = new HuffmanTree[maxSize + 1];
 	}
 	
-	public int heapsize() {
+	public int heapSize() {
 		return heapSize;
 	}
 	
@@ -38,7 +38,7 @@ class BinaryHeap implements MinHeap{
 		int index = heapSize + 1;
 		binHeap[heapSize + 1] = node;
 		
-		//Adjust heap
+		// adjust heap
 		while(index/2 != 0 && binHeap[index/2].weight() > node.weight()){
 			swap(index, index/2);
 			index = index/2;
@@ -59,7 +59,7 @@ class BinaryHeap implements MinHeap{
 		HuffmanTree tempNode;
 		int leastChild;
 		
-		//Adjust heap
+		// adjust heap
 		if(heapSize > 1){
 			while(index*2+1 <= heapSize && (isChildLess(index, 0) || isChildLess(index, 1))){
 				

@@ -1,19 +1,20 @@
-//Classes for building huffman tree
 
-//General node
+// classes for building huffman tree
+
+// general node
 interface HuffBaseNode {
 	boolean isLeaf(); 
 	int weight();
 }
 
 
-//Huffman tree leaf node
+// huffman tree leaf node
 class HuffLeafNode implements HuffBaseNode {
 	
 	private char element;      // Element for this node
 	private int weight;        // Weight for this node
 
-	//Constructor
+	// constructor
 	HuffLeafNode(char el, int wt){
 		element = el; weight = wt;
 	}
@@ -32,13 +33,13 @@ class HuffLeafNode implements HuffBaseNode {
 }
 
 
-//Huffman tree internal node
+// huffman tree internal node
 class HuffInternalNode implements HuffBaseNode {
 	private int weight;            
 	private HuffBaseNode left;  	
 	private HuffBaseNode right; 
 
-	//Constructor
+	// constructor
 	HuffInternalNode(HuffBaseNode l, HuffBaseNode r, int wt){
 		left = l; right = r; weight = wt; 
 	}
@@ -62,12 +63,12 @@ class HuffInternalNode implements HuffBaseNode {
 }
 
 
-//Tree Structure
+// tree structure
 class HuffmanTree{
 	
 	private HuffBaseNode root;  
 	
-	//Constructors
+	// constructors
 	HuffmanTree(char el, int wt){
 		root = new HuffLeafNode(el, wt);
 	}
@@ -83,10 +84,4 @@ class HuffmanTree{
 		return root.weight();
 	}
 	
-	int compareTo(Object t){
-		HuffmanTree that = (HuffmanTree)t;
-		if (root.weight() < that.weight()) return -1;
-	    else if (root.weight() == that.weight()) return 0;
-	    else return 1;
-	}
 }
