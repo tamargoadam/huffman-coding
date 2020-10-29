@@ -11,16 +11,14 @@ public class HuffmanDecoder {
 
 	private Hashtable<String, Character> codeTable = new Hashtable<String, Character>(128);
 
-	private void createCodeTable(File codes){
+	public void createCodeTable(File codes){
 
 		codeTable.clear();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(codes))) {
 			String line;
-			String[] s;
 			while ((line = br.readLine()) != null) {
-				s = line.split("\\s+");
-				codeTable.put(line.substring(2), line.charAt(0));
+				if(line.length() > 2) codeTable.put(line.substring(2), line.charAt(0));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -30,9 +28,7 @@ public class HuffmanDecoder {
 	
 
 	// take a bin file and huffman tree and output the decoded words
-	public void decodeBinFile(File encoded, File codes){
-
-		createCodeTable(codes);
+	public void decodeBinFile(File encoded){
 		
 		String code = "";
 

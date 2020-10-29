@@ -21,8 +21,11 @@ public class decoder {
 		System.out.println("running huffman decoding.\n");
 		HuffmanDecoder decoder = new HuffmanDecoder();
 		
+		System.out.println("creating code table...");
+		decoder.createCodeTable(codeTableFile);
+		
 		System.out.println("generating decoded file (decoded.txt)...");
-		decoder.decodeBinFile(encodedFile, codeTableFile);
+		decoder.decodeBinFile(encodedFile);
 		
 		System.out.println("\nhuffman decoding complete.");
 	}
