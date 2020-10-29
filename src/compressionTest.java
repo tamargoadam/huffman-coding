@@ -16,11 +16,13 @@ public class compressionTest {
 		
 		System.out.println("Encoded File:\n-----------------------");
 		String encoded = huff.encodeFile(textFile, huffTree);
+		huff.generateEncodedFile(textFile, huffTree);
 		System.out.println(encoded + "\n");
 		System.out.println("length:" + encoded.length() + "\n");
 		
 		System.out.println("Decoded File:\n-----------------------");
-		System.out.println(huff.decodeFile(encoded, huffTree) + "\n");
+		File encodedFile = new File("./encoded.bin");
+		System.out.println(huff.decodeBinFile(encodedFile, huffTree) + "\n");
 		
 	}
 
