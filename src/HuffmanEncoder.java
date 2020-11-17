@@ -8,7 +8,7 @@ import java.util.Hashtable;
 public class HuffmanEncoder {
 
 	private String heapType = "binary"; // binary, 4way, or pairing
-	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>(128);
+	private Hashtable<Character, String> encodeTable = new Hashtable<Character, String>();
 
 	// constructor
 	// defaults heap type to binary

@@ -9,7 +9,7 @@ import java.util.Hashtable;
 
 public class HuffmanDecoder {
 
-	private Hashtable<String, Character> codeTable = new Hashtable<String, Character>(128);
+	private Hashtable<String, Character> codeTable = new Hashtable<String, Character>();
 
 	public void createCodeTable(File codes){
 
