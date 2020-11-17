@@ -20,9 +20,11 @@ public class HuffmanEncoder {
 	// search through huffman tree
 	private Hashtable<Character, String> huffEncodeTable(HuffmanTree huff){
 		
+		String cc;
 		for(int i=0; i<127; i++){
-			if(characterCode(huff.root(), (char)i, "") != ""){
-				encodeTable.put((char)i, characterCode(huff.root(), (char)i, ""));
+			cc = characterCode(huff.root(), (char)i, "");
+			if(cc != ""){
+				encodeTable.put((char)i, cc);
 			}
 		}
 		
