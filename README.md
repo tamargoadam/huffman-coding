@@ -1,5 +1,5 @@
 # Huffman Coding
-Encoding and decoding of large text files via Huffman coding lossless compression algorithm.
+Encoding and decoding of large text files via Huffman coding lossless compression algorithm
 
 ## Overview
 
